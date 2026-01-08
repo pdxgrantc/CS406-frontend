@@ -23,6 +23,9 @@ import reportWebVitals from './reportWebVitals.ts'
 
 import App from './App.tsx'
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
+
 const rootRoute = createRootRoute({
   component: () => (
     <>
@@ -71,9 +74,11 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
         <RouterProvider router={router} />
       </TanStackQueryProvider.Provider>
+      </GoogleOAuthProvider>
     </StrictMode>,
   )
 }
