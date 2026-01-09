@@ -58,6 +58,26 @@ export default function Login({ onSignedIn }: Props) {
       // ======================================================
 
       // For now, just notify parent that user signed in
+
+      const apiBase = import.meta.env.DEV
+        ? ""
+        : (import.meta.env.VITE_API_BASE_URL ?? "");
+
+      const resp = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_token: credential, sub: "102312321321" }),
+      });
+
+      if (!resp.ok) {
+        throw new Error("Backend authentication failed");
+      }
+      
+      const data = await resp.json();
+      const appToken = data.access_token as string;
+
+      localStorage.setItem("access_token", appToken);
+
       onSignedIn?.(decoded);
     } catch (err) {
       console.error(err);
