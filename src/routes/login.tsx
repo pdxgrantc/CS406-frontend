@@ -13,7 +13,7 @@ type GoogleIdTokenPayload = {
 };
 
 type Props = {
-  onSignedIn?: (token: string) => void;
+  onSignedIn?: (user: GoogleIdTokenPayload) => void;
 };
 
 export default function Login({ onSignedIn }: Props) {
@@ -25,30 +25,40 @@ export default function Login({ onSignedIn }: Props) {
     setError(null);
 
     try {
-      // Optional: decode for UI only (DO NOT trust for auth)
+      // Decode Google ID token (UI ONLY)
       const decoded = jwtDecode<GoogleIdTokenPayload>(credential);
+
       console.log("Signed in as:", decoded.email);
+      console.log("Google user payload:", decoded);
 
-      const resp = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/google`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id_token: credential }),
-        }
-      );
+      // ======================================================
+      // 🚫 BACKEND AUTH DISABLED (API not implemented yet)
+      // ======================================================
+      //
+      // const resp = await fetch(
+      //   `${import.meta.env.VITE_API_BASE_URL}/api/auth/google`,
+      //   {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({ id_token: credential }),
+      //   }
+      // );
+      //
+      // if (!resp.ok) {
+      //   throw new Error("Backend authentication failed");
+      // }
+      //
+      // const data = await resp.json();
+      // const appToken = data.access_token as string;
+      //
+      // localStorage.setItem("access_token", appToken);
+      //
+      // onSignedIn?.(appToken);
+      //
+      // ======================================================
 
-      if (!resp.ok) {
-        throw new Error("Backend authentication failed");
-      }
-
-      const data = await resp.json();
-      const appToken = data.access_token as string;
-
-      // Store token (in-memory preferred; localStorage shown for simplicity)
-      localStorage.setItem("access_token", appToken);
-
-      onSignedIn?.(appToken);
+      // For now, just notify parent that user signed in
+      onSignedIn?.(decoded);
     } catch (err) {
       console.error(err);
       setError("Google sign-in failed");
