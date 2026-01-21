@@ -18,3 +18,19 @@ export const userStore = new Store<UserState>({
   user: null,
   loading: true,
 })
+
+
+export const setUser = (user: UserDoc | null) => {
+  userStore.setState((state) => ({
+    ...state,
+    user,
+    loading: false,
+  }))
+}
+
+export const setLoading = (loading: boolean) => {
+  userStore.setState((state) => ({
+    ...state,
+    loading,
+  }))
+}
