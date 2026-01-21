@@ -66,7 +66,7 @@ export default function Login({ onSignedIn }: Props) {
       const resp = await fetch("http://localhost:8080/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_token: credential, sub: "102312321321" }),
+        body: JSON.stringify({ id_token: credential, data: decoded }),
       });
 
       if (!resp.ok) {
