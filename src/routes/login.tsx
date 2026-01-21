@@ -1,6 +1,7 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
+import { setUser } from "../../stores/userStore";
 
 type GoogleIdTokenPayload = {
   sub: string;
@@ -77,6 +78,19 @@ export default function Login({ onSignedIn }: Props) {
       const appToken = data.access_token as string;
 
       localStorage.setItem("access_token", appToken);
+
+      // Map Google ID token payload to our app UserDoc shape and store it
+      const nameParts = (decoded.name ?? "").split(" ");
+      const user = {
+        uid: decoded.sub,
+        given_name: nameParts[0] ?? "",
+        family_name: nameParts.slice(1).join(" ") ?? "",
+        picture: decoded.picture ?? "",
+        email: decoded.email ?? "",
+        displayName: decoded.name,
+      };
+
+      setUser(user);
 
       onSignedIn?.(decoded);
     } catch (err) {

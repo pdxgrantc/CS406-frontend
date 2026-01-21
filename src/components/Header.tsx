@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router'
 
 import { useState } from 'react'
+import { useStore } from '@tanstack/react-store'
+import { userStore } from '../../stores/userStore'
 import {
   ClipboardType,
   Home,
@@ -13,6 +15,7 @@ import {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const user = useStore(userStore, (s) => s.user)
 
   return (
     <>
@@ -33,6 +36,11 @@ export default function Header() {
             />
           </Link>
         </h1>
+        <div>
+          {user?.given_name ? (
+            <span className="ml-4">Welcome {user.displayName}</span>
+          ) : null}
+        </div>
       </header>
 
       <aside
