@@ -1,0 +1,18 @@
+runtime: nodejs20
+service: web
+
+handlers:
+  - url: /assets
+    static_dir: dist/assets
+
+  - url: /(.*\.(json|ico|png|jpg|jpeg|gif|svg|css|js|map|txt|woff|woff2))$
+    static_files: dist/\1
+    upload: dist/.*\.(json|ico|png|jpg|jpeg|gif|svg|css|js|map|txt|woff|woff2)$
+
+  - url: /.*
+    static_files: dist/index.html
+    upload: dist/index.html
+
+env_variables:
+  GOOGLE_CLIENT_ID: "824364431102-jes516shlatgjncpkjgbo1mcsmqkkq7c.apps.googleusercontent.com"
+  APP_JWT_SECRET: "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"

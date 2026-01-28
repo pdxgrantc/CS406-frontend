@@ -60,11 +60,11 @@ export default function Login({ onSignedIn }: Props) {
 
       // For now, just notify parent that user signed in
 
-      const apiBase = import.meta.env.DEV
-        ? ""
-        : (import.meta.env.VITE_API_BASE_URL ?? "");
+      const loginUrl = import.meta.env.DEV
+        ? "http://localhost:8080/login"
+        : `${import.meta.env.VITE_API_BASE_URL}/login`;
 
-      const resp = await fetch("http://localhost:8080/login", {
+      const resp = await fetch(loginUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_token: credential, data: decoded }),
